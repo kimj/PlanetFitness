@@ -31,7 +31,7 @@ dependencies {
     implementation(libs.retrofit.converter.gson) // If using Gson
 
     // Room
-    implementation(libs.androidx.room.runtime)
+    api(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 }

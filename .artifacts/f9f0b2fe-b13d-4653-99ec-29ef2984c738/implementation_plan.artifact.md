@@ -1,34 +1,49 @@
-# Implementation Plan - Repository Pattern for Offline-First Data
+# Implementation Plan - HomeViewModel and Repository Integration
 
-Implement a Repository in the `:data` module to orchestrate data flow between Retrofit (Network) and Room (Local Database), providing an "Offline-First" experience.
+Create a `HomeViewModel` to manage the state for the `HomePage`, integrating it with the `ProgramRepository` from the `:data` module.
+
+## User Review Required
+
+> [!IMPORTANT]
+> I will be adding a dependency from the `:app` module to the `:data` module so the ViewModel can access the repository.
 
 ## Proposed Changes
 
-### [Component: Data Repository]
-Create the repository and necessary mapping logic.
+### [Component: App Dependencies]
 
-#### [MODIFY] [ProgramEntity.kt](file:///Users/kimj/proj/PlanetFitness/data/src/main/java/com/mentalmachines/planetfitness/data/database/ProgramEntity.kt)
-- Add a mapper function `toDomain()` to convert `ProgramEntity` back to the domain `Program` model.
+#### [MODIFY] [app/build.gradle.kts](file:///Users/kimj/proj/PlanetFitness/app/build.gradle.kts)
+- Add `implementation(project(":data"))`.
+- Add `androidx-lifecycle-viewmodel-compose` dependency.
 
-#### [NEW] [ProgramRepository.kt](file:///Users/kimj/proj/PlanetFitness/data/src/main/java/com/mentalmachines/planetfitness/data/repository/ProgramRepository.kt)
-- Create a `ProgramRepository` class.
-- Methods:
-    - `programs: Flow<List<Program>>`: Exposes a stream of programs from the local database.
-    - `refreshPrograms()`: Fetches programs from the network and updates the local database.
-    - `getProgram(id: String): Flow<Program?>`: Retrieves a specific program.
+#### [MODIFY] [libs.versions.toml](file:///Users/kimj/proj/PlanetFitness/gradle/libs.versions.toml)
+- Add `androidx-lifecycle-viewmodel-compose` to the `libraries` section.
 
-## Design Decisions
+---
 
-- **Offline-First Strategy**: The UI will observe the local database. The repository is responsible for fetching fresh data from the network and saving it to Room, which automatically triggers UI updates via `Flow`.
-- **Data Mapping**:
-    - Network (`Program`) -> Database (`ProgramEntity`) via `toEntity()`.
-    - Database (`ProgramEntity`) -> UI/Domain (`Program`) via `toDomain()`.
-- **Simplification**: Note that the current `ProgramEntity` stores a subset of the `Program` data (e.g., it currently excludes nested `Workouts` and `Trainer` details). I will use the current entity structure for the boilerplate implementation.
+### [Component: ViewModel Implementation]
+
+#### [NEW] [HomeViewModel.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomeViewModel.kt)
+- Create `HomeViewModel` extending `ViewModel`.
+- Inject `ProgramRepository` (via constructor).
+- Expose a `HomeUiState` using `StateFlow`.
+- Implement `refreshPrograms()` to trigger data loading.
+
+#### [NEW] [HomeUiState.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomeUiState.kt)
+- Define a data class to represent the UI state (Loading, Success, Error).
+
+---
+
+### [Component: UI Integration]
+
+#### [MODIFY] [HomePage.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomePage.kt)
+- Update `HomePage` to accept a `HomeViewModel`.
+- Observe the `uiState` from the ViewModel.
+- Pass data to `HomeContent()`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `gradle :data:assembleDebug` to ensure compilation.
+- Run `gradle :app:assembleDebug` to ensure compilation and dependency resolution.
 
 ### Manual Verification
-- Verify the repository correctly interacts with both `ProgramDao` and `PlanetFitnessApi`.
+- Verify that the Home tab displays the loading state and then populates with data (once the network/db is wired up).

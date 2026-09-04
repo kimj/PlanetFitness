@@ -17,10 +17,4 @@ interface ProgramDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPrograms(vararg programs: ProgramEntity)
-
-    @Delete
-    suspend fun deleteProgram(program: ProgramEntity)
-
-    @Query("DELETE FROM programs")
-    suspend fun deleteAll()
 }

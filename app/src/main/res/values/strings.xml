@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PlanetFitness</string>
+
+    <string name="bottom_navigation_home">Home</string>_name">
+    <string name="bottom_navigation_workouts">Workouts</string>_name">
+    <string name="bottom_navigation_my_journey">My Journey</string>_name">
+
 </resources>

@@ -1,23 +1,35 @@
-# Walkthrough - Program Repository Implementation
+# Walkthrough - HomeViewModel and Repository Integration
 
-I have implemented the Repository pattern in the `:data` module to orchestrate data between the network and the local database.
+I have successfully implemented the `HomeViewModel` and integrated it with the `ProgramRepository` to display data in the `HomePage`.
 
 ## Changes Made
 
-### Data Mapping
-- **[ProgramEntity.kt](file:///Users/kimj/proj/PlanetFitness/data/src/main/java/com/mentalmachines/planetfitness/data/database/ProgramEntity.kt)**: Added `toDomain()` extension function to convert database entities back to the domain `Program` model.
+### Dependency Management
+- **[libs.versions.toml](file:///Users/kimj/proj/PlanetFitness/gradle/libs.versions.toml)**: Added `androidx-lifecycle-viewmodel-compose` and `androidx-lifecycle-runtime-compose`.
+- **[app/build.gradle.kts](file:///Users/kimj/proj/PlanetFitness/app/build.gradle.kts)**:
+    - Added dependency on the `:data` module.
+    - Added Lifecycle and ViewModel Compose libraries.
+- **[data/build.gradle.kts](file:///Users/kimj/proj/PlanetFitness/data/build.gradle.kts)**: Exposed `androidx.room:room-runtime` via `api` to allow the `:app` module to access database classes.
 
-### Repository
-- **[ProgramRepository.kt](file:///Users/kimj/proj/PlanetFitness/data/src/main/java/com/mentalmachines/planetfitness/data/repository/ProgramRepository.kt)**: Created the `ProgramRepository` class.
-    - `programs`: A `Flow<List<Program>>` that provides a reactive stream of programs from the local database.
-    - `refreshPrograms()`: A suspending function that fetches programs from the network via Retrofit and saves them to Room using `onConflict = REPLACE`.
-    - `getProgram(id)`: Retrieves a specific program as a `Flow`.
+### ViewModel Layer
+- **[HomeUiState.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomeUiState.kt)**: Defined a sealed interface for the Home screen's UI state (Loading, Success, Error).
+- **[HomeViewModel.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomeViewModel.kt)**:
+    - Implemented `HomeViewModel` to observe programs from the repository.
+    - Added `HomeViewModelFactory` to handle manual instantiation without a DI framework.
+    - The ViewModel automatically triggers a `refresh()` on initialization to fetch data from the network.
+
+### UI Integration
+- **[HomePage.kt](file:///Users/kimj/proj/PlanetFitness/app/src/main/java/com/mentalmachines/planetfitness/features/homepage/HomePage.kt)**:
+    - Updated to use `HomeViewModel` via the `viewModel()` composable.
+    - Implemented `HomeContent` to handle state transitions (showing a progress indicator while loading).
+    - Added `ProgramList` and `ProgramCard` to display fitness programs in a Material 3 Card format.
 
 ## Verification Results
 
 ### Automated Tests
-- Successfully ran `gradle :data:assembleDebug`. The repository and mapping logic compile correctly.
+- Successfully ran `gradle :app:assembleDebug`. The project is now fully wired from the database/network layer up to the UI.
 
 ## Next Steps
-- **Dependency Injection**: You can now provide `ProgramRepository` to your ViewModels. You'll need to pass the `PlanetFitnessApi` and `ProgramDao` instances to its constructor.
-- **Error Handling**: The current `refreshPrograms` has basic error logging. You might want to implement a more robust `Result` wrapper to propagate network errors to the UI.
+- **Dependency Injection**: Consider migrating to Hilt for cleaner ViewModel injection.
+- **Navigation**: Wire up the "Search" and "Profile" tabs with their own ViewModels and content.
+- **Detail Screens**: Implement navigation to the `ProgramOverview` screen when a `ProgramCard` is clicked.
