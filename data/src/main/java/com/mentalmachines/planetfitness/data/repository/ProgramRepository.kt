@@ -32,14 +32,4 @@ class ProgramRepository(
             e.printStackTrace()
         }
     }
-
-    /**
-     * Get a specific program by ID as a Flow.
-     */
-    fun getProgram(id: String): Flow<Program?> {
-        // Here we could also trigger a refresh for the specific program if needed
-        return dao.getAllPrograms().map { entities ->
-            entities.find { it.programId == id }?.toDomain()
-        }
-    }
 }

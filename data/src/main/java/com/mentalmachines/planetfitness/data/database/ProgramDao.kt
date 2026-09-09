@@ -12,9 +12,6 @@ interface ProgramDao {
     @Query("SELECT * FROM programs")
     fun getAllPrograms(): Flow<List<ProgramEntity>>
 
-    @Query("SELECT * FROM programs WHERE programId = :id")
-    suspend fun getProgramById(id: String): ProgramEntity?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPrograms(vararg programs: ProgramEntity)
 }

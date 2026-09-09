@@ -7,7 +7,4 @@ import retrofit2.http.Path
 interface PlanetFitnessApi {
     @GET("programs")
     suspend fun getPrograms(): List<Program>
-
-    @GET("programs/{id}")
-    suspend fun getProgramDetails(@Path("id") id: String): Program
 }
