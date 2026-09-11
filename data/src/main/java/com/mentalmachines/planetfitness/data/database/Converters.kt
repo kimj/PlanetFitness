@@ -15,4 +15,15 @@ class Converters {
         val listType = object : TypeToken<List<String>>() {}.type
         return Gson().fromJson(value, listType)
     }
+
+    @TypeConverter
+    fun fromWorkoutsList(value: List<com.mentalmachines.planetfitness.data.Workouts>?): String? {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    fun toWorkoutsList(value: String?): List<com.mentalmachines.planetfitness.data.Workouts>? {
+        val listType = object : TypeToken<List<com.mentalmachines.planetfitness.data.Workouts>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
 }

@@ -20,6 +20,21 @@ class ProgramRepository(
     }
 
     /**
+     * Get a specific program by ID.
+     */
+    fun getProgramById(programId: String): Flow<Program?> = dao.getProgramById(programId).map { entity ->
+        entity?.toDomain()
+    }
+
+    /**
+     * Get a specific workout by ID from a program.
+     */
+    fun getWorkoutById(programId: String, workoutId: String): Flow<com.mentalmachines.planetfitness.data.Workouts?> =
+        getProgramById(programId).map { program ->
+            program?.workouts?.find { it.workoutId == workoutId }
+        }
+
+    /**
      * Fetch fresh programs from the network and update the local database.
      */
     suspend fun refreshPrograms() {
