@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class ProgramOverviewViewModel(
-    private val programId: String,
-    private val repository: ProgramRepository
+    programId: String,
+    repository: ProgramRepository
 ) : ViewModel() {
 
     val uiState: StateFlow<ProgramOverviewUiState> = repository.getProgramById(programId)

@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class WorkoutDetailViewModel(
-    private val programId: String,
-    private val workoutId: String,
-    private val repository: ProgramRepository
+    programId: String,
+    workoutId: String,
+    repository: ProgramRepository
 ) : ViewModel() {
 
     val uiState: StateFlow<WorkoutDetailUiState> = repository.getWorkoutById(programId, workoutId)
