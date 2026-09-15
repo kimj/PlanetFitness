@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +50,7 @@ import com.mentalmachines.planetfitness.data.Program
 import com.mentalmachines.planetfitness.data.database.AppDatabase
 import com.mentalmachines.planetfitness.data.network.NetworkClient
 import com.mentalmachines.planetfitness.data.repository.ProgramRepository
+import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,13 +109,15 @@ fun HomeContent(uiState: HomeUiState, onProgramClick: (String) -> Unit) {
             }
         }
         is HomeUiState.Success -> {
-            Column {
-                FilterChipRow()
-                Text(text = "Programs")
-                ProgramList(programs = uiState.programs, onProgramClick = onProgramClick)
-                ShowMoreButton()
-                Text(text = "Exercise Tutorials")
-                LearnMoreCard()
+            Box(modifier = Modifier.padding(8.dp)){
+                Column {
+                    FilterChipRow()
+                    Text(text = "Programs", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    ProgramList(programs = uiState.programs, onProgramClick = onProgramClick)
+                    ShowMoreButton()
+                    Text(text = "Exercise Tutorials", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    LearnMoreCard()
+                }
             }
         }
         is HomeUiState.Error -> {
@@ -206,13 +210,15 @@ data class NavigationItem(
     val icon: ImageVector
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterChipRow(){
     var selectedChip by remember { mutableStateOf("All") }
     val filterChips : List<String> = listOf("All Workouts", "Abs & Core", "Full Body", "Upper" )
 
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        filterChips.forEach { filter ->
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.width(600.dp)) {
+        items(filterChips) { filter ->
             FilterChip(
                 selected = filter == selectedChip,
                 onClick = { selectedChip = filter },
@@ -237,13 +243,8 @@ fun LearnMoreCard() {
         modifier = Modifier
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        onClick = {
-            // Handle card click
-            // Navigate to program details screen
-        }
     ) {
-        Row() {
-            // Image
+        Row(modifier = Modifier.padding(8.dp)) {
             Text("Learn How to use equipment and exercises")
         }
     }
