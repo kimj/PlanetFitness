@@ -3,14 +3,20 @@ package com.mentalmachines.planetfitness.features.programoverview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -113,23 +119,37 @@ fun ProgramOverviewBody(program: Program) {
     Column() {
         Text(program.summary ?: "No Summary")
         Text("Read More", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        HorizontalDivider(Modifier.padding(8.dp), DividerDefaults.Thickness, DividerDefaults.color)
+
     }
 }
 
 @Composable
 fun ProgramOverViewWorkoutList(workouts: List<Workouts>?, onWorkoutClick: (String) -> Unit) {
-    Text("Workouts", style = MaterialTheme.typography.titleMedium)
+    Text("${workouts?.size} Workouts", style = MaterialTheme.typography.titleMedium)
 
     Column() {
         workouts?.forEach { workout ->
-            Column(
+            Row(
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
                     .clickable { workout.workoutId?.let { onWorkoutClick(it) } }
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(workout.title ?: "No Title", style = MaterialTheme.typography.bodyLarge)
-                Text(workout.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(workout.title ?: "No Title", style = MaterialTheme.typography.bodyLarge)
+                    Text(workout.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+            HorizontalDivider(thickness = 0.5.dp, color = DividerDefaults.color)
         }
     }
 }

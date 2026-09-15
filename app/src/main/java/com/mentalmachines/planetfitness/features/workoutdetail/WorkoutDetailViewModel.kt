@@ -15,10 +15,10 @@ class WorkoutDetailViewModel(
     repository: ProgramRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<WorkoutDetailUiState> = repository.getWorkoutById(programId, workoutId)
-        .map { workout ->
-            if (workout != null) {
-                WorkoutDetailUiState.Success(workout)
+    val uiState: StateFlow<WorkoutDetailUiState> = repository.getProgramById(programId)
+        .map { program ->
+            if (program != null) {
+                WorkoutDetailUiState.Success(program)
             } else {
                 WorkoutDetailUiState.Error("Workout not found")
             }

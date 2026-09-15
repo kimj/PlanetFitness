@@ -2,10 +2,12 @@ package com.mentalmachines.planetfitness.features.workoutdetail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,6 +34,7 @@ fun WorkoutDetailPage(
     programId: String?,
     workoutId: String?,
     onBackClick: () -> Unit,
+    onStartWorkoutTimerClick: (minutes : Int) -> Unit,
     viewModel: WorkoutDetailViewModel = viewModel(
         factory = WorkoutDetailViewModelFactory(
             programId ?: "",
@@ -44,6 +47,7 @@ fun WorkoutDetailPage(
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val workoutId = workoutId ?: return
 
     Scaffold(
         topBar = {
@@ -63,12 +67,24 @@ fun WorkoutDetailPage(
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 is WorkoutDetailUiState.Success -> {
-                    val workout = state.workout
+                    val program = state.program
+                    val workout = state.program.workouts?.find { it.workoutId == workoutId }
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(workout.title ?: "No Title", style = MaterialTheme.typography.headlineMedium)
-                        Text("${workout.durationMinutes ?: 0} minutes", style = MaterialTheme.typography.bodyLarge)
-                        Text(workout.level ?: "N/A", style = MaterialTheme.typography.bodyMedium)
-                        Text(workout.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                        Text(workout?.title ?: "No Title", style = MaterialTheme.typography.headlineMedium)
+                        Text("${program.title} • Workout ${workout?.order}" ?: "No Title", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
+                        Text("with ${program.trainer?.name ?: "No Trainer"}" , style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
+
+                        Spacer(modifier = Modifier.padding(4.dp))
+
+                        Text("${workout?.durationMinutes ?: 0} minutes", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(workout?.level ?: "N/A", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(program.focus ?: "N/A", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(program.equipment.toString(), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(workout?.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Button(content = { Text("Start Workout") }, onClick = { onStartWorkoutTimerClick(
+                            workout?.durationMinutes ?: 0
+                        ) })
                     }
                 }
                 is WorkoutDetailUiState.Error -> {
