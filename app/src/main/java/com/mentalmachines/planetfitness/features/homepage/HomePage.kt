@@ -50,7 +50,6 @@ import com.mentalmachines.planetfitness.data.Program
 import com.mentalmachines.planetfitness.data.database.AppDatabase
 import com.mentalmachines.planetfitness.data.network.NetworkClient
 import com.mentalmachines.planetfitness.data.repository.ProgramRepository
-import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,10 +111,10 @@ fun HomeContent(uiState: HomeUiState, onProgramClick: (String) -> Unit) {
             Box(modifier = Modifier.padding(8.dp)){
                 Column {
                     FilterChipRow()
-                    Text(text = "Programs", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.programs_label), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                     ProgramList(programs = uiState.programs, onProgramClick = onProgramClick)
                     ShowMoreButton()
-                    Text(text = "Exercise Tutorials", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.exercise_tutorials_label), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                     LearnMoreCard()
                 }
             }
@@ -157,15 +156,15 @@ fun ProgramCard(program: Program, onClick: (String) -> Unit) {
             Column(
             ) {
                 Text(
-                    text = program.title ?: "No Title",
+                    text = program.title ?: stringResource(R.string.no_title),
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = program.level ?: "N/A",
+                    text = program.level ?: stringResource(R.string.not_available),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = program.focus ?: "N/A",
+                    text = program.focus ?: stringResource(R.string.not_available),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -179,12 +178,12 @@ fun ProgramCard(program: Program, onClick: (String) -> Unit) {
 }
 @Composable
 fun WorkoutsContent(){
-    Text(text = "Workouts Content")
+    Text(text = stringResource(R.string.workouts_content_placeholder))
 }
 
 @Composable
 fun MyJourneyContent(){
-    Text(text = "My Journey Content")
+    Text(text = stringResource(R.string.my_journey_content_placeholder))
 }
 
 @Composable
@@ -214,7 +213,12 @@ data class NavigationItem(
 @Composable
 fun FilterChipRow(){
     var selectedChip by remember { mutableStateOf("All") }
-    val filterChips : List<String> = listOf("All Workouts", "Abs & Core", "Full Body", "Upper" )
+    val filterChips = listOf(
+        stringResource(R.string.filter_all_workouts),
+        stringResource(R.string.filter_abs_core),
+        stringResource(R.string.filter_full_body),
+        stringResource(R.string.filter_upper)
+    )
 
     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.width(600.dp)) {
@@ -233,7 +237,7 @@ fun FilterChipRow(){
 fun ShowMoreButton() {
     Button(
         onClick = {}, modifier = Modifier.padding(8.dp) ) {
-        Text("Show More")
+        Text(stringResource(R.string.show_more_button))
     }
 }
 
@@ -245,7 +249,7 @@ fun LearnMoreCard() {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
-            Text("Learn How to use equipment and exercises")
+            Text(stringResource(R.string.learn_more_description))
         }
     }
 }

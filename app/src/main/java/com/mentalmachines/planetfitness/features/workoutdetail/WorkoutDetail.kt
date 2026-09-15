@@ -21,9 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mentalmachines.planetfitness.R
 import com.mentalmachines.planetfitness.data.database.AppDatabase
 import com.mentalmachines.planetfitness.data.network.NetworkClient
 import com.mentalmachines.planetfitness.data.repository.ProgramRepository
@@ -52,10 +54,10 @@ fun WorkoutDetailPage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Workout Detail") },
+                title = { Text(stringResource(R.string.workout_detail_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_button_content_description))
                     }
                 }
             )
@@ -70,19 +72,19 @@ fun WorkoutDetailPage(
                     val program = state.program
                     val workout = state.program.workouts?.find { it.workoutId == workoutId }
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(workout?.title ?: "No Title", style = MaterialTheme.typography.headlineMedium)
-                        Text("${program.title} • Workout ${workout?.order}" ?: "No Title", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
-                        Text("with ${program.trainer?.name ?: "No Trainer"}" , style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
+                        Text(workout?.title ?: stringResource(R.string.no_title), style = MaterialTheme.typography.headlineMedium)
+                        Text(stringResource(R.string.workout_order_format, program.title ?: stringResource(R.string.no_title), workout?.order ?: 0), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
+                        Text(stringResource(R.string.trainer_prefix, program.trainer?.name ?: stringResource(R.string.no_trainer)) , style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 4.dp))
 
                         Spacer(modifier = Modifier.padding(4.dp))
 
-                        Text("${workout?.durationMinutes ?: 0} minutes", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(vertical = 8.dp))
-                        Text(workout?.level ?: "N/A", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
-                        Text(program.focus ?: "N/A", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(stringResource(R.string.duration_minutes, workout?.durationMinutes ?: 0), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(workout?.level ?: stringResource(R.string.not_available), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(program.focus ?: stringResource(R.string.not_available), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
                         Text(program.equipment.toString(), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 8.dp))
-                        Text(workout?.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                        Text(workout?.description ?: stringResource(R.string.no_description), style = MaterialTheme.typography.bodySmall)
                         Spacer(modifier = Modifier.padding(4.dp))
-                        Button(content = { Text("Start Workout") }, onClick = { onStartWorkoutTimerClick(
+                        Button(content = { Text(stringResource(R.string.start_workout_button)) }, onClick = { onStartWorkoutTimerClick(
                             workout?.durationMinutes ?: 0
                         ) })
                     }

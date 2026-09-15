@@ -28,9 +28,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mentalmachines.planetfitness.R
 import com.mentalmachines.planetfitness.data.Program
 import com.mentalmachines.planetfitness.data.Workouts
 import com.mentalmachines.planetfitness.data.database.AppDatabase
@@ -59,10 +61,10 @@ fun ProgramOverviewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Program Overview") },
+                title = { Text(stringResource(R.string.program_overview_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_button_content_description))
                     }
                 }
             )
@@ -100,15 +102,15 @@ fun ProgramOverviewScreen(
 fun ProgramOverviewHeader(title: String?, level: String?, focus: String?) {
     Column {
         Text(
-            text = title ?: "No Title",
+            text = title ?: stringResource(R.string.no_title),
             style = MaterialTheme.typography.titleLarge
         )
         Text(
-            text = level ?: "N/A",
+            text = level ?: stringResource(R.string.not_available),
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text = focus ?: "N/A",
+            text = focus ?: stringResource(R.string.not_available),
             style = MaterialTheme.typography.bodySmall
         )
     }
@@ -117,8 +119,8 @@ fun ProgramOverviewHeader(title: String?, level: String?, focus: String?) {
 @Composable
 fun ProgramOverviewBody(program: Program) {
     Column() {
-        Text(program.summary ?: "No Summary")
-        Text("Read More", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        Text(program.summary ?: stringResource(R.string.no_summary))
+        Text(stringResource(R.string.read_more), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         HorizontalDivider(Modifier.padding(8.dp), DividerDefaults.Thickness, DividerDefaults.color)
 
     }
@@ -126,7 +128,7 @@ fun ProgramOverviewBody(program: Program) {
 
 @Composable
 fun ProgramOverViewWorkoutList(workouts: List<Workouts>?, onWorkoutClick: (String) -> Unit) {
-    Text("${workouts?.size} Workouts", style = MaterialTheme.typography.titleMedium)
+    Text(stringResource(R.string.workouts_count, workouts?.size ?: 0), style = MaterialTheme.typography.titleMedium)
 
     Column() {
         workouts?.forEach { workout ->
@@ -140,8 +142,8 @@ fun ProgramOverViewWorkoutList(workouts: List<Workouts>?, onWorkoutClick: (Strin
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(workout.title ?: "No Title", style = MaterialTheme.typography.bodyLarge)
-                    Text(workout.description ?: "No Description", style = MaterialTheme.typography.bodySmall)
+                    Text(workout.title ?: stringResource(R.string.no_title), style = MaterialTheme.typography.bodyLarge)
+                    Text(workout.description ?: stringResource(R.string.no_description), style = MaterialTheme.typography.bodySmall)
                 }
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

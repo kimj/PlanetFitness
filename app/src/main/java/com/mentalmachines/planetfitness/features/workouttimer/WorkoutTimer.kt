@@ -26,7 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mentalmachines.planetfitness.R
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,10 +58,10 @@ fun WorkoutTimerScreen(minutes: Int, onBackClick: () -> Unit) {
 
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text("Workout Timer") },
+            title = { Text(stringResource(R.string.workout_timer_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_button_content_description))
                 }
             }
         )
@@ -68,10 +70,10 @@ fun WorkoutTimerScreen(minutes: Int, onBackClick: () -> Unit) {
             Column {
                 Text(text = formatMs(remaining), style = MaterialTheme.typography.displayLarge)
 
-                Text(text = "You Can Do IT!", style = MaterialTheme.typography.bodyLarge)
+                Text(text = stringResource(R.string.motivation_text), style = MaterialTheme.typography.bodyLarge)
                 Row {
-                    Button(content = { Text("Pause") }, onClick = { isRunning = false }, modifier = Modifier.padding(8.dp))
-                    Button(content = { Text("Restart") }, onClick = { isRunning = true }, modifier = Modifier.padding(8.dp))
+                    Button(content = { Text(stringResource(R.string.pause_button)) }, onClick = { isRunning = false }, modifier = Modifier.padding(8.dp))
+                    Button(content = { Text(stringResource(R.string.restart_button)) }, onClick = { isRunning = true }, modifier = Modifier.padding(8.dp))
                 }
             }
         }

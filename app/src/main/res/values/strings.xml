@@ -1,8 +1,43 @@
 <resources>
-    <string name="app_name">PlanetFitness</string>
+    <string name="app_name">Planet Fitness</string>
 
-    <string name="bottom_navigation_home">Home</string>_name">
-    <string name="bottom_navigation_workouts">Workouts</string>_name">
-    <string name="bottom_navigation_my_journey">My Journey</string>_name">
+    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_workouts">Workouts</string>
+    <string name="bottom_navigation_my_journey">My Journey</string>
+
+    <string name="programs_label">Programs</string>
+    <string name="exercise_tutorials_label">Exercise Tutorials</string>
+    <string name="no_title">No Title</string>
+    <string name="not_available">N/A</string>
+    <string name="workouts_content_placeholder">Workouts Content</string>
+    <string name="my_journey_content_placeholder">My Journey Content</string>
+    <string name="filter_all">All</string>
+    <string name="filter_all_workouts">All Workouts</string>
+    <string name="filter_abs_core">Abs &amp; Core</string>
+    <string name="filter_full_body">Full Body</string>
+    <string name="filter_upper">Upper</string>
+    <string name="show_more_button">Show More</string>
+    <string name="learn_more_description">Learn How to use equipment and exercises</string>
+
+    <string name="program_overview_title">Program Overview</string>
+    <string name="back_button_content_description">Back</string>
+    <string name="no_summary">No Summary</string>
+    <string name="read_more">Read More</string>
+    <string name="workouts_count">%d Workouts</string>
+    <string name="no_description">No Description</string>
+    <string name="program_not_found">Program not found</string>
+
+    <string name="workout_timer_title">Workout Timer</string>
+    <string name="motivation_text">You Can Do IT!</string>
+    <string name="pause_button">Pause</string>
+    <string name="restart_button">Restart</string>
+
+    <string name="workout_not_found">Workout not found</string>
+    <string name="workout_detail_title">Workout Detail</string>
+    <string name="no_trainer">No Trainer</string>
+    <string name="duration_minutes">%d minutes</string>
+    <string name="start_workout_button">Start Workout</string>
+    <string name="workout_order_format">%1$s • Workout %2$d</string>
+    <string name="trainer_prefix">with %s</string>
 
 </resources>
