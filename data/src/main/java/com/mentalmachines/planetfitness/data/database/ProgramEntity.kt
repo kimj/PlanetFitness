@@ -13,7 +13,9 @@ data class ProgramEntity(
     val focus: String?,
     val equipment: List<String>?,
     val totalWorkouts: Int?,
-    val workouts: List<com.mentalmachines.planetfitness.data.Workouts>?
+    val workouts: List<com.mentalmachines.planetfitness.data.Workouts>?,
+    val trainer: com.mentalmachines.planetfitness.data.Trainer?,
+    val cta: com.mentalmachines.planetfitness.data.Cta?
 )
 
 fun Program.toEntity(): ProgramEntity? {
@@ -26,7 +28,9 @@ fun Program.toEntity(): ProgramEntity? {
         focus = focus,
         equipment = equipment,
         totalWorkouts = totalWorkouts,
-        workouts = workouts
+        workouts = workouts,
+        trainer = trainer,
+        cta = cta
     )
 }
 
@@ -39,6 +43,8 @@ fun ProgramEntity.toDomain(): Program {
         focus = focus,
         equipment = equipment,
         totalWorkouts = totalWorkouts,
-        workouts = workouts
+        workouts = workouts,
+        trainer = trainer,
+        cta = cta
     )
 }
