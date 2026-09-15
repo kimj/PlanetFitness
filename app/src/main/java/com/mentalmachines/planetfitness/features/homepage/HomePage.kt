@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -127,6 +129,29 @@ fun HomeContent(uiState: HomeUiState, onProgramClick: (String) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterChipRow(){
+    var selectedChip by remember { mutableStateOf("All") }
+    val filterChips = listOf(
+        stringResource(R.string.filter_all_workouts),
+        stringResource(R.string.filter_abs_core),
+        stringResource(R.string.filter_full_body),
+        stringResource(R.string.filter_upper)
+    )
+
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.width(600.dp)) {
+        items(filterChips) { filter ->
+            FilterChip(
+                selected = filter == selectedChip,
+                onClick = { selectedChip = filter },
+                label = { Text(filter) },
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
 @Composable
 fun ProgramList(programs: List<Program>, onProgramClick: (String) -> Unit) {
     LazyRow(
@@ -176,6 +201,31 @@ fun ProgramCard(program: Program, onClick: (String) -> Unit) {
         }
     }
 }
+
+@Composable
+fun ShowMoreButton() {
+    Button(
+        onClick = {}, modifier = Modifier.padding(8.dp) ) {
+        Text(stringResource(R.string.show_more_button))
+    }
+}
+
+@Composable
+fun LearnMoreCard() {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .height(300.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Row(modifier = Modifier.padding(8.dp)) {
+            Text(stringResource(R.string.learn_more_description))
+        }
+    }
+}
+
+
 @Composable
 fun WorkoutsContent(){
     Text(text = stringResource(R.string.workouts_content_placeholder))
@@ -209,47 +259,5 @@ data class NavigationItem(
     val icon: ImageVector
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FilterChipRow(){
-    var selectedChip by remember { mutableStateOf("All") }
-    val filterChips = listOf(
-        stringResource(R.string.filter_all_workouts),
-        stringResource(R.string.filter_abs_core),
-        stringResource(R.string.filter_full_body),
-        stringResource(R.string.filter_upper)
-    )
 
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.width(600.dp)) {
-        items(filterChips) { filter ->
-            FilterChip(
-                selected = filter == selectedChip,
-                onClick = { selectedChip = filter },
-                label = { Text(filter) },
-                modifier = Modifier.padding(4.dp)
-            )
-        }
-    }
-}
 
-@Composable
-fun ShowMoreButton() {
-    Button(
-        onClick = {}, modifier = Modifier.padding(8.dp) ) {
-        Text(stringResource(R.string.show_more_button))
-    }
-}
-
-@Composable
-fun LearnMoreCard() {
-    Card(
-        modifier = Modifier
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text(stringResource(R.string.learn_more_description))
-        }
-    }
-}

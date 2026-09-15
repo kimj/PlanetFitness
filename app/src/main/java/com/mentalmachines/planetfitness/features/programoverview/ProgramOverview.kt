@@ -2,6 +2,7 @@ package com.mentalmachines.planetfitness.features.programoverview
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -71,36 +71,40 @@ fun ProgramOverviewScreen(
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
-            when (val state = uiState) {
-                is ProgramOverviewUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-                is ProgramOverviewUiState.Success -> {
-                    val program = state.program
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        ProgramOverviewHeader(program.title, program.level, program.focus)
+            ProgramOverviewContent(uiState, onWorkoutClick)
+        }
+    }
+}
 
-                        Spacer(modifier = Modifier.height(8.dp))
-                        ProgramOverviewBody(program)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        ProgramOverViewWorkoutList(program.workouts, onWorkoutClick)
-                    }
-                }
-                is ProgramOverviewUiState.Error -> {
-                    Text(
-                        text = state.message,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
+@Composable
+fun BoxScope.ProgramOverviewContent(uiState: ProgramOverviewUiState, onWorkoutClick: (String) -> Unit) {
+    when (uiState) {
+        is ProgramOverviewUiState.Loading -> {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+        is ProgramOverviewUiState.Success -> {
+            val program = uiState.program
+            Column(modifier = Modifier.padding(16.dp)) {
+                ProgramOverviewHeader(program.title, program.level, program.focus)
+                Spacer(modifier = Modifier.height(8.dp))
+                ProgramOverviewBody(program)
+                Spacer(modifier = Modifier.height(8.dp))
+                ProgramOverViewWorkoutList(program.workouts, onWorkoutClick)
             }
+        }
+        is ProgramOverviewUiState.Error -> {
+            Text(
+                text = uiState.message,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }
 
 @Composable
 fun ProgramOverviewHeader(title: String?, level: String?, focus: String?) {
-    Column {
+    Column (modifier = Modifier.padding(8.dp)){
         Text(
             text = title ?: stringResource(R.string.no_title),
             style = MaterialTheme.typography.titleLarge
@@ -118,11 +122,10 @@ fun ProgramOverviewHeader(title: String?, level: String?, focus: String?) {
 
 @Composable
 fun ProgramOverviewBody(program: Program) {
-    Column() {
+    Column (modifier = Modifier.padding(8.dp)) {
         Text(program.summary ?: stringResource(R.string.no_summary))
         Text(stringResource(R.string.read_more), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         HorizontalDivider(Modifier.padding(8.dp), DividerDefaults.Thickness, DividerDefaults.color)
-
     }
 }
 
@@ -130,7 +133,7 @@ fun ProgramOverviewBody(program: Program) {
 fun ProgramOverViewWorkoutList(workouts: List<Workouts>?, onWorkoutClick: (String) -> Unit) {
     Text(stringResource(R.string.workouts_count, workouts?.size ?: 0), style = MaterialTheme.typography.titleMedium)
 
-    Column() {
+    Column {
         workouts?.forEach { workout ->
             Row(
                 modifier = Modifier
